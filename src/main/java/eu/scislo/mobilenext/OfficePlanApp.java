@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class OfficePlanApp extends Application {
 
-    private int width = 800;
+    private int width = 1000;
     private int height = 600;
 
     @Override
@@ -18,7 +18,9 @@ public class OfficePlanApp extends Application {
         AnchorPane pane = fxmlLoader.load(); // To oznacza, że będziemy podpinać kontoler do AnchorPane
         primaryStage.setTitle("Office Plan");
         Scene scene = new Scene(pane, width, height);
-        scene.getStylesheets().add("jfoenix.css");
+        scene.getStylesheets().add("css/jfoenix-customizations.css");
+        scene.getStylesheets().add("css/jfx-tree-table-view.css");
+        scene.getStylesheets().add("css/jfx-text-field.css");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(width);
         primaryStage.setMinHeight(height);
