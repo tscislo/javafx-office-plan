@@ -9,16 +9,22 @@ import javafx.stage.Stage;
 
 public class OfficePlanApp extends Application {
 
+    private int width = 800;
+    private int height = 600;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main.fxml"));
         AnchorPane pane = fxmlLoader.load(); // To oznacza, że będziemy podpinać kontoler do AnchorPane
-        primaryStage.setTitle("Lista ludzi");
-        primaryStage.setScene(new Scene(pane, 400, 600));
-        primaryStage.setMinWidth(400);
-        primaryStage.setMinHeight(600);
+        primaryStage.setTitle("Office Plan");
+        Scene scene = new Scene(pane, width, height);
+        scene.getStylesheets().add("jfoenix.css");
+        primaryStage.setScene(scene);
+        primaryStage.setMinWidth(width);
+        primaryStage.setMinHeight(height);
+        primaryStage.setMaxWidth(width);
+        primaryStage.setMaxHeight(height);
         MainController mainWindowController = fxmlLoader.getController();
-//        mainWindowController.setMain(this);
         primaryStage.show();
     }
 
