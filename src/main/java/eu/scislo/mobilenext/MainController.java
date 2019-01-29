@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -81,6 +82,9 @@ public class MainController implements Initializable {
 
     private SimpleStringProperty filePath = new SimpleStringProperty();
 
+    // Based on this we determine if there was any interaction with edit form or if any person was selected from the list
+    private SimpleBooleanProperty isDirty = new SimpleBooleanProperty(false);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.read.getStyleClass().add("button-raised");
@@ -111,7 +115,8 @@ public class MainController implements Initializable {
 
         // Enables/disables add button
         this.add.disableProperty().bind(Bindings.createBooleanBinding(
-                () -> !this.name.validate() ||
+                () -> !this.isDirty.getValue() ||
+                        !this.name.validate() ||
                         !this.startTime.validate() ||
                         !this.surname.validate() ||
                         !this.endTime.validate() ||
@@ -120,7 +125,8 @@ public class MainController implements Initializable {
                 this.selectedPerson.startTimeProperty(),
                 this.selectedPerson.endTimeProperty(),
                 this.selectedPerson.firstNameProperty(),
-                this.selectedPerson.lastNameProperty()
+                this.selectedPerson.lastNameProperty(),
+                this.isDirty
         ));
 
         // Enables/disables save button if any file has been previously read
@@ -137,6 +143,7 @@ public class MainController implements Initializable {
             if (this.peopleList.getSelectionModel().getSelectedItem() != null) {
                 this.selectedPerson = this.peopleList.getSelectionModel().getSelectedItem().getValue().clone();
                 this.bindPerson();
+                this.isDirty.set(true);
             }
         });
 
@@ -163,6 +170,7 @@ public class MainController implements Initializable {
             if (!newVal) {
                 textField.validate();
             }
+            this.isDirty.set(true);
         });
     }
 
@@ -236,18 +244,6 @@ public class MainController implements Initializable {
         this.stage = stage;
     }
 
-    public void report() {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
-            this.writeToFile(file.getPath());
-        }
-    }
-
-    public void add() {
-        this.people.add(this.selectedPerson.clone());
-    }
-
     public void read() {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stage);
@@ -275,6 +271,19 @@ public class MainController implements Initializable {
 
         if (result.get() == ButtonType.OK) {
             this.writeToFile(this.filePath.getValue());
+        }
+    }
+
+    public void add() {
+        this.people.add(this.selectedPerson.clone());
+    }
+
+
+    public void report() {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            this.writeToFile(file.getPath());
         }
     }
 
