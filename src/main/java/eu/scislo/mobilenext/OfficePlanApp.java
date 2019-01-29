@@ -27,6 +27,7 @@ public class OfficePlanApp extends Application {
         primaryStage.setMaxWidth(width);
         primaryStage.setMaxHeight(height);
         MainController mainWindowController = fxmlLoader.getController();
+        mainWindowController.setStage(primaryStage);
         primaryStage.show();
     }
 

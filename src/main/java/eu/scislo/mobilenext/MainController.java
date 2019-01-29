@@ -13,15 +13,28 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeTableColumn;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 
 public class MainController implements Initializable {
 
+    private Stage stage;
 
     @FXML
     public JFXButton read;
@@ -91,20 +104,15 @@ public class MainController implements Initializable {
         this.addNumberValidator(this.endTime, "Musi być liczbą!");
         this.addNumberValidator(this.startTime, "Musi być liczbą!");
 
-        this.name.textProperty().bindBidirectional(selectedPerson.firstNameProperty());
-        this.surname.textProperty().bindBidirectional(selectedPerson.lastNameProperty());
-        this.startTime.textProperty().bindBidirectional(selectedPerson.startTimeProperty());
-        this.endTime.textProperty().bindBidirectional(selectedPerson.endTimeProperty());
-        this.roomNo.textProperty().bindBidirectional(selectedPerson.roomProperty());
+        this.bindPerson();
 
         // Enables/disables add button
         this.add.disableProperty().bind(Bindings.createBooleanBinding(
-                () ->
-                        !this.name.validate() ||
-                                !this.startTime.validate() ||
-                                !this.surname.validate() ||
-                                !this.endTime.validate() ||
-                                !this.roomNo.validate(),
+                () -> !this.name.validate() ||
+                        !this.startTime.validate() ||
+                        !this.surname.validate() ||
+                        !this.endTime.validate() ||
+                        !this.roomNo.validate(),
                 this.selectedPerson.roomProperty(),
                 this.selectedPerson.startTimeProperty(),
                 this.selectedPerson.endTimeProperty(),
@@ -112,6 +120,21 @@ public class MainController implements Initializable {
                 this.selectedPerson.lastNameProperty()
         ));
 
+        this.peopleList.getSelectionModel().selectedItemProperty().addListener((observable) -> {
+            if (this.peopleList.getSelectionModel().getSelectedItem() != null) {
+                this.selectedPerson = this.peopleList.getSelectionModel().getSelectedItem().getValue().clone();
+                this.bindPerson();
+            }
+        });
+
+    }
+
+    private void bindPerson() {
+        this.name.textProperty().bindBidirectional(selectedPerson.firstNameProperty());
+        this.surname.textProperty().bindBidirectional(selectedPerson.lastNameProperty());
+        this.startTime.textProperty().bindBidirectional(selectedPerson.startTimeProperty());
+        this.endTime.textProperty().bindBidirectional(selectedPerson.endTimeProperty());
+        this.roomNo.textProperty().bindBidirectional(selectedPerson.roomProperty());
     }
 
     private void addRequiredValidator(JFXTextField textField, String customValidationText) {
@@ -141,6 +164,15 @@ public class MainController implements Initializable {
         textField.getValidators().add(validator);
     }
 
+    private void showError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, msg);
+        alert.showAndWait();
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     public void rename() {
 
     }
@@ -148,6 +180,47 @@ public class MainController implements Initializable {
     public void add() {
         this.people.add(this.selectedPerson.clone());
 
+    }
+
+    public void parseJSON(File file) {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            Object peopleArr = jsonParser.parse(new FileReader(file.getPath()));
+            JSONArray jsonArray = (JSONArray) peopleArr;
+            Iterator it = jsonArray.iterator();
+            this.people.clear();
+            while (it.hasNext()) {
+                JSONObject personObj = (JSONObject) it.next();
+                this.people.add(new Person(
+                        personObj.get("name").toString(),
+                        personObj.get("surname").toString(),
+                        personObj.get("startTime").toString(),
+                        personObj.get("endTime").toString(),
+                        personObj.get("roomNo").toString()
+                ));
+
+            }
+        } catch (Exception e) {
+            this.showError("Błędy w pliku wejściowym!");
+        }
+    }
+
+    public void read() {
+        JSONParser parser = new JSONParser();
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            try {
+                String fileType = Files.probeContentType(file.toPath());
+                if (!(fileType.equals("application/json"))) {
+                    this.showError("Nieobsługiwany format pliku!");
+                } else {
+                    this.parseJSON(file);
+                }
+            } catch (IOException e) {
+                this.showError("Nie można sprawdzić typu pliku!");
+            }
+        }
     }
 
 

@@ -16,10 +16,12 @@ public class Person extends RecursiveTreeObject<Person> {
 
     }
 
-    public Person(String firstName, String lastName, String room) {
-        this.setRoom(room);
+    public Person(String firstName, String lastName, String statTime, String endTime, String roomNo) {
         this.setFirstName(firstName);
         this.setLastName(lastName);
+        this.setStartTime(statTime);
+        this.setEndTime(endTime);
+        this.setRoom(roomNo);
     }
 
 
