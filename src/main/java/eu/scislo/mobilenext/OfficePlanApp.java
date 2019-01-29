@@ -16,7 +16,7 @@ public class OfficePlanApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main.fxml"));
         AnchorPane pane = fxmlLoader.load(); // To oznacza, że będziemy podpinać kontoler do AnchorPane
-        primaryStage.setTitle("Office Plan");
+        primaryStage.setTitle("Plan Biura");
         Scene scene = new Scene(pane, width, height);
         scene.getStylesheets().add("css/jfoenix-customizations.css");
         scene.getStylesheets().add("css/jfx-tree-table-view.css");

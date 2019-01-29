@@ -2,19 +2,26 @@ package eu.scislo.mobilenext;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
+import org.json.simple.JSONObject;
 
 
 public class Person extends RecursiveTreeObject<Person> {
+    public static Person fromJSON(JSONObject personObj) {
+        return new Person(
+                personObj.get("name").toString(),
+                personObj.get("surname").toString(),
+                personObj.get("startTime").toString(),
+                personObj.get("endTime").toString(),
+                personObj.get("room").toString()
+        );
+    }
+
     private SimpleStringProperty firstName = new SimpleStringProperty();
     private SimpleStringProperty lastName = new SimpleStringProperty();
     private SimpleStringProperty room = new SimpleStringProperty();
     private SimpleStringProperty startTime = new SimpleStringProperty();
     private SimpleStringProperty endTime = new SimpleStringProperty();
 
-
-    public Person() {
-
-    }
 
     public Person(String firstName, String lastName, String statTime, String endTime, String roomNo) {
         this.setFirstName(firstName);
@@ -24,6 +31,9 @@ public class Person extends RecursiveTreeObject<Person> {
         this.setRoom(roomNo);
     }
 
+    public Person() {
+
+    }
 
     public String getFirstName() {
         return firstName.get();
@@ -91,6 +101,16 @@ public class Person extends RecursiveTreeObject<Person> {
 
     public String toString() {
         return this.getFirstName() + " " + this.getLastName() + " " + this.getRoom();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject personJSON = new JSONObject();
+        personJSON.put("name", this.getFirstName());
+        personJSON.put("surname", this.getLastName());
+        personJSON.put("startTime", this.getStartTime());
+        personJSON.put("endTime", this.getEndTime());
+        personJSON.put("room", this.getRoom());
+        return personJSON;
     }
 
     public Person clone() {

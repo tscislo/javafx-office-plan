@@ -6,10 +6,13 @@
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import com.jfoenix.controls.JFXDialog?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import javafx.scene.control.Label?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.scislo.mobilenext.MainController">
     <children>
         <JFXButton fx:id="read" layoutX="14.0" layoutY="14.0" onAction="#read" prefHeight="26.0" prefWidth="100.0" text="Wczytaj" />
-        <JFXButton fx:id="save" layoutX="14.0" layoutY="72.0" prefHeight="26.0" prefWidth="100.0" text="Zapisz" />
+        <JFXButton fx:id="save" layoutX="14.0" layoutY="72.0" onAction="#write" prefHeight="26.0" prefWidth="100.0" text="Zapisz" />
         <JFXButton fx:id="add" layoutX="14.0" layoutY="127.0" onAction="#add" prefHeight="26.0" prefWidth="100.0" text="Dodaj" />
         <JFXButton fx:id="report" layoutX="14.0" layoutY="180.0" onAction="#rename" prefHeight="26.0" prefWidth="100.0" text="Raport" />
         <JFXTreeTableView fx:id="peopleList" layoutX="182.0" layoutY="14.0" prefHeight="544.0" prefWidth="452.0">
@@ -25,4 +28,5 @@
         <JFXTextField fx:id="endTime" labelFloat="true" layoutX="818.0" layoutY="79.0" prefWidth="150.0" promptText="Godz zak pracy" />
         <JFXTextField fx:id="roomNo" labelFloat="true" layoutX="660.0" layoutY="138.0" prefWidth="150.0" promptText="Nr pokoju" />
     </children>
+
 </AnchorPane>
