@@ -125,4 +125,8 @@ public class Person extends RecursiveTreeObject<Person> {
 
         return cloned;
     }
+
+    public Integer getWorkingHours() {
+        return Integer.parseInt(this.getEndTime()) - Integer.parseInt(this.getStartTime());
+    }
 }

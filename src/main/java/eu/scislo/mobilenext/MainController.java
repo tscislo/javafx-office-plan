@@ -22,14 +22,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -125,9 +123,15 @@ public class MainController implements Initializable {
                 this.selectedPerson.lastNameProperty()
         ));
 
+        // Enables/disables save button if any file has been previously read
         this.save.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> this.filePath.getValue() == null,
                 this.filePath));
+
+        this.report.disableProperty().bind(Bindings.createBooleanBinding(
+                () -> this.people.size() == 0,
+                this.people
+        ));
 
         this.peopleList.getSelectionModel().selectedItemProperty().addListener((observable) -> {
             if (this.peopleList.getSelectionModel().getSelectedItem() != null) {
@@ -211,26 +215,19 @@ public class MainController implements Initializable {
     }
 
     private void writeToFile(String path) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Potwierdzenie");
-        alert.setHeaderText("Czy na pewno chcesz zapisać do pliku?");
-        alert.setContentText(path);
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if(result.get() == ButtonType.OK) {
-            FileWriter file = null;
+        FileWriter file = null;
+        try {
+            file = new FileWriter(path);
+            FXCollections.sort(this.people, new PersonComparator());
+            file.write(this.parseToJSON().toJSONString());
+        } catch (IOException e) {
+            this.showError("Błąd zapisu do pliku!");
+        } finally {
             try {
-                file = new FileWriter(path);
-                file.write(this.parseToJSON().toJSONString());
+                file.close();
+                this.showMsg("Zapisano poprawnie!");
             } catch (IOException e) {
-                this.showError("Błąd zapisu do pliku!");
-            } finally {
-                try {
-                    file.close();
-                    this.showMsg("Zapisano poprawnie!");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                e.printStackTrace();
             }
         }
     }
@@ -239,8 +236,12 @@ public class MainController implements Initializable {
         this.stage = stage;
     }
 
-    public void rename() {
-
+    public void report() {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            this.writeToFile(file.getPath());
+        }
     }
 
     public void add() {
@@ -266,7 +267,15 @@ public class MainController implements Initializable {
     }
 
     public void write() {
-        this.writeToFile(this.filePath.getValue());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Potwierdzenie");
+        alert.setHeaderText("Czy na pewno chcesz zapisać do pliku?");
+        alert.setContentText(this.filePath.getValue());
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            this.writeToFile(this.filePath.getValue());
+        }
     }
 
 
