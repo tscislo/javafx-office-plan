@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
@@ -76,6 +77,9 @@ public class MainController implements Initializable {
 
     @FXML
     private JFXTextField endTime;
+
+    @FXML
+    private VBox floorPlan;
 
     private Person selectedPerson = new Person();
     private ObservableList<Person> people = FXCollections.observableArrayList();
@@ -139,14 +143,16 @@ public class MainController implements Initializable {
                 this.people
         ));
 
+        FloorPlan floorPlan = new FloorPlan(this.floorPlan, this.people);
+
         this.peopleList.getSelectionModel().selectedItemProperty().addListener((observable) -> {
             if (this.peopleList.getSelectionModel().getSelectedItem() != null) {
-                this.selectedPerson = this.peopleList.getSelectionModel().getSelectedItem().getValue().clone();
+                this.selectedPerson = this.peopleList.getSelectionModel().getSelectedItem().getValue().clone(true);
                 this.bindPerson();
                 this.isDirty.set(true);
+                floorPlan.draw(selectedPerson.id);
             }
         });
-
     }
 
     private void bindPerson() {
@@ -226,7 +232,7 @@ public class MainController implements Initializable {
         FileWriter file = null;
         try {
             file = new FileWriter(path);
-            FXCollections.sort(this.people, new PersonComparator());
+            FXCollections.sort(this.people, new PersonComparatorByWorkHours());
             file.write(this.parseToJSON().toJSONString());
         } catch (IOException e) {
             this.showError("Błąd zapisu do pliku!");
@@ -275,7 +281,7 @@ public class MainController implements Initializable {
     }
 
     public void add() {
-        this.people.add(this.selectedPerson.clone());
+        this.people.add(this.selectedPerson.clone(false));
     }
 
 

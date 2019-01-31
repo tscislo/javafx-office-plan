@@ -1,0 +1,51 @@
+[
+  {
+    "surname": "Kowalski",
+    "name": "Jan",
+    "startTime": "6",
+    "endTime": "15",
+    "room": "10"
+  },
+  {
+    "surname": "Kowalski",
+    "name": "Marian",
+    "startTime": "6",
+    "endTime": "15",
+    "room": "2"
+  },
+  {
+    "surname": "Kowalski",
+    "name": "Leszek",
+    "startTime": "6",
+    "endTime": "17",
+    "room": "9"
+  },
+  {
+    "surname": "Nowak",
+    "name": "Joanna",
+    "startTime": "6",
+    "endTime": "17",
+    "room": "6"
+  },
+  {
+    "surname": "Nowak",
+    "name": "Halina",
+    "startTime": "6",
+    "endTime": "17",
+    "room": "3"
+  },
+  {
+    "surname": "Stachowiak",
+    "name": "Halina",
+    "startTime": "6",
+    "endTime": "17",
+    "room": "4"
+  },
+  {
+    "surname": "Stachowiak",
+    "name": "Grzegorz",
+    "startTime": "5",
+    "endTime": "20",
+    "room": "5"
+  }
+]

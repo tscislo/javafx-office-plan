@@ -16,6 +16,9 @@ public class Person extends RecursiveTreeObject<Person> {
         );
     }
 
+    public static int lastId = 0;
+
+    public int id;
     private SimpleStringProperty firstName = new SimpleStringProperty();
     private SimpleStringProperty lastName = new SimpleStringProperty();
     private SimpleStringProperty room = new SimpleStringProperty();
@@ -24,6 +27,7 @@ public class Person extends RecursiveTreeObject<Person> {
 
 
     public Person(String firstName, String lastName, String statTime, String endTime, String roomNo) {
+        this.id = lastId++;
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setStartTime(statTime);
@@ -32,7 +36,7 @@ public class Person extends RecursiveTreeObject<Person> {
     }
 
     public Person() {
-
+        this.id = lastId++;
     }
 
     public String getFirstName() {
@@ -113,8 +117,11 @@ public class Person extends RecursiveTreeObject<Person> {
         return personJSON;
     }
 
-    public Person clone() {
+    public Person clone(boolean copyIdFromOrginal) {
         Person cloned = new Person();
+
+        if (copyIdFromOrginal)
+            cloned.id = this.id;
 
         // clone mutable fields
         cloned.setFirstName(this.getFirstName());

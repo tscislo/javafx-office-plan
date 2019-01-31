@@ -4,7 +4,10 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableColumn?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.scislo.mobilenext.MainController">
     <children>
@@ -16,7 +19,7 @@
             <columns>
                 <JFXTreeTableColumn fx:id="firstNameColumn" minWidth="133" prefWidth="152.0" resizable="false" text="Imię" />
                 <JFXTreeTableColumn fx:id="lastNameColumn" minWidth="113.0" prefWidth="150.0" resizable="false" text="Nazwisko" />
-                <JFXTreeTableColumn fx:id="roomColumn" minWidth="95.0" prefWidth="147.0" resizable="false" text="Pokój" />
+                <JFXTreeTableColumn fx:id="roomColumn" minWidth="95.0" prefWidth="147.0" resizable="false" sortable="false" text="Pokój" />
             </columns>
         </JFXTreeTableView>
         <JFXTextField fx:id="name" labelFloat="true" layoutX="660.0" layoutY="14.0" prefWidth="150.0" promptText="Imię" />
@@ -24,6 +27,15 @@
         <JFXTextField fx:id="surname" labelFloat="true" layoutX="660.0" layoutY="79.0" prefWidth="150.0" promptText="Nazwisko" />
         <JFXTextField fx:id="endTime" labelFloat="true" layoutX="818.0" layoutY="79.0" prefWidth="150.0" promptText="Godz zak pracy" />
         <JFXTextField fx:id="roomNo" labelFloat="true" layoutX="660.0" layoutY="138.0" prefWidth="150.0" promptText="Nr pokoju" />
+      <ScrollPane layoutX="656.0" layoutY="206.0" prefHeight="353.0" prefWidth="309.0">
+         <content>
+            <VBox fx:id="floorPlan" alignment="CENTER" prefHeight="351.0" prefWidth="277.0" spacing="15.0">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
     </children>
 
 </AnchorPane>
